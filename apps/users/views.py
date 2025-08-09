@@ -44,6 +44,7 @@ def profile_likes(request, username):
         "profile_user": profile_user,
         "liked_posts": liked_posts,
         "likes_count": liked_posts.count(),
+        "posts_count": profile_user.posts.count(),
         "active_tab": "likes",
     }
     return render(request, "apps/user/profile/tab_likes.html", ctx)

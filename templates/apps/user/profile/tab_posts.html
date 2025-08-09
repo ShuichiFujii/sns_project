@@ -1,11 +1,12 @@
 {% extends 'apps/user/profile/base_profile.html' %}
+{% load static %}
 {% block tab_content %}
 <div class="content-area">
     {% for post in posts %}
         {# 投稿カードをコンポーネント化している場合は include でもOK #}
         <div class="post-card">
             <div class="post-header">
-                <img src="{{ post.author.avatar.url }}" alt="" class="post-avatar">
+                <img src="{% static 'img/default-avatar.svg' %}" alt="" class="post-avatar">
                 <div class="post-meta">
                     <div class="post-author">
                         <span class="author-name">{{ post.author.username }}</span>

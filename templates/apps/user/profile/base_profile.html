@@ -11,7 +11,7 @@
 <div class="container">
 
     {# ① プロフィール共通ヘッダー #}
-    {% include 'apps/user/profile/_profile_header.html' with profile_user=profile_user %}
+    {% include 'apps/user/profile/_profile_header.html' with profile_user=profile_user posts_count=posts_count likes_count=likes_count %}
 
     {# ② タブナビゲーション #}
     <nav class="tabs-container">

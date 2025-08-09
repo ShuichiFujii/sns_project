@@ -32,16 +32,16 @@ class Post(models.Model):
     
     def toggle_like_by(self, user):
         from apps.likes.models import Like
-        like = Like.objects.filter(user=user).first()
-        
+        like = Like.objects.filter(user=user, post=self).first()
+
         if like:
             like.delete()
         else:
             Like.objects.create(user=user, post=self)
-            
+
     def toggle_pin_by(self, user):
-        pin = Pin.objects.filter(user=user).first()
-        
+        pin = Pin.objects.filter(user=user, post=self).first()
+
         if pin:
             pin.delete()
         else:
@@ -61,5 +61,4 @@ class Post(models.Model):
     def get_posts(cls, user=None):
         if user:
             return cls.objects.filter(author=user)
-        
         return cls.objects.all()

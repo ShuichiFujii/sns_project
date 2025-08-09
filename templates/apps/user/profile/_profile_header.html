@@ -1,52 +1,29 @@
-{# プロフィールヘッダー専用パーシャル #}
+{# プロフィールヘッダー #}
 <div class="profile-header">
     <div class="cover-section">
         <div class="cover-image"></div>
         <div class="profile-avatar">
             <img src="/placeholder.svg?height=120&width=120" alt="プロフィール画像">
-            <div class="status-indicator"></div>
         </div>
     </div>
     <div class="profile-info">
-        <div class="profile-main">
-            <div class="name-section">
-                <h1 class="display-name">{{ profile_user.username }}</h1>
-                <span class="username">@{{ profile_user.username }}</span>
-                {% if profile_user.is_verified %}
-                    <div class="verified-badge">✓</div>
-                {% endif %}
-            </div>
-            {# 例としてボタンを残しておく — 必要に応じてビュー側で条件分岐 #}
-            <div class="action-buttons">
-                <button class="btn-secondary">メッセージ</button>
-                <button class="btn-primary">フォロー</button>
-                <button class="btn-icon">⋯</button>
-            </div>
+        <div class="name-section">
+            <h1 class="display-name">{{ profile_user.username }}</h1>
+            <span class="username">@{{ profile_user.username }}</span>
         </div>
-        <div class="bio-section">
-            {% if profile_user.bio %}
-                <p class="bio">{{ profile_user.bio|linebreaksbr }}</p>
-            {% endif %}
-            <div class="profile-links">
-                {% if profile_user.website %}
-                    <a href="{{ profile_user.website }}" class="profile-link">{{ profile_user.website }}</a>
-                {% endif %}
-                <span class="join-date">{{ profile_user.date_joined|date:"Y年n月に参加" }}</span>
-            </div>
+        <div class="profile-links">
+            <span class="join-date">{{ profile_user.date_joined|date:"Y年n月に参加" }}</span>
         </div>
         <div class="stats-section">
-            <div class="stat-item">
-                <span class="stat-number">{{ profile_user.following.count }}</span>
-                <span class="stat-label">フォロー中</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number">{{ profile_user.followers.count }}</span>
-                <span class="stat-label">フォロワー</span>
-            </div>
             <div class="stat-item">
                 <span class="stat-number">{{ posts_count }}</span>
                 <span class="stat-label">投稿</span>
             </div>
+            <div class="stat-item">
+                <span class="stat-number">{{ likes_count }}</span>
+                <span class="stat-label">いいね</span>
+            </div>
         </div>
     </div>
 </div>
+

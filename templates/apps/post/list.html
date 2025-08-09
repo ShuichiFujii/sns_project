@@ -1,0 +1,149 @@
+{% extends 'apps/base.html' %}
+
+{% block title %}投稿一覧 - SNS App{% endblock %}
+
+<!-- header 中身 -->
+{% block header_nav %}
+<nav class="nav">
+    {# 全体タイムライン #}
+    {% if view_mode == 'all' %}
+        <strong>投稿一覧</strong>
+    {% else %}
+        <a href="{% url 'posts:post_list' %}">投稿一覧</a>
+    {% endif %}
+
+    {# 自分の投稿一覧 #}
+    {% if view_mode == 'mine' %}
+        <strong>自分の投稿</strong>
+    {% else %}
+        <a href="{% url 'users:my_posts' username=request.user.username %}">自分の投稿</a>
+    {% endif %}
+
+    {# 自分がいいねした投稿一覧（※実装済なら） #}
+    {% if view_mode == 'liked' %}
+        <strong>いいねした投稿</strong>
+    {% else %}
+        <a href="{% url 'users:my_likes' username=request.user.username %}">いいねした投稿</a>
+    {% endif %}
+
+    {# ピン留め一覧（※実装済なら） #}
+    {% if view_mode == 'pinned' %}
+        <strong>ピン留めした投稿</strong>
+    {% else %}
+        <a href="{% url 'users:my_pins' username=request.user.username %}">ピン留めした投稿</a>
+    {% endif %}
+
+    <a href="{% url 'posts:post_create' %}">投稿作成</a>
+</nav>
+{% endblock %}
+
+
+<!-- body 中身 -->
+{% block content %}
+
+<div class="page-title">
+    {% if view_mode == 'mine' %}
+        自分の投稿一覧
+    {% elif view_mode == 'liked' %}
+        いいねした投稿
+    {% elif view_mode == 'pinned' %}
+        ピン留めした投稿
+    {% elif view_mode == 'other' %}
+        {{ profile_user.username }} さんの投稿一覧
+    {% else %}
+        投稿一覧
+    {% endif %}
+</div>
+
+<div class="user-info">
+    <p><strong>ログイン状態:</strong> {{ request.user.is_authenticated }}</p>
+    <p><strong>ユーザー名:</strong> {{ request.user.username }}</p>
+</div>
+
+<div class="posts-container">
+    {% for post in posts %}
+        <div class="post-item">
+            <div class="post-header">
+                <div>
+                    <div class="post-author">
+                        <a href="{% url 'users:profile' username=post.author.username %}">
+                            {{ post.author.username }}
+                        </a>
+                    </div>
+                    <div class="post-date">{{ post.created_at }} ID: {{ post.id }}</div>
+                </div>
+            </div>
+            
+            <div class="post-content">
+                {{ post.content | truncatechars:50 }}
+            </div>
+
+            {% if post.image %}
+                <div class="post-image">
+                    <img src="{{ post.image.url }}" alt="Post Image" class="img-fluid">
+                </div>
+            {% endif %}
+            
+            <div>
+                <strong>Tags:</strong>
+                {% for tag in post.tags.all %}
+                    <span class="tag">{{ tag.name }}</span>
+                {% empty %}
+                    <span>No tags</span>
+                {% endfor %}
+            </div>
+
+            <div>
+                <strong>Views:</strong> {{ post.views }}
+            </div>
+                        
+
+            <div class="post-footer">
+                <div class="like-section">
+                    <span class="like-count">❤️ {{ post.likes.count }}</span>
+                    
+                    <form method="post" action="{% url 'likes:post_like_toggle' post.id %}" class="like-form">
+                        {% csrf_token %}
+                        {% if post.liked_by_me %}
+                            <button type="submit" class="btn-danger">いいね取り消し</button>
+                        {% else %}
+                            <button type="submit" class="btn btn-primary btn-small">いいね</button>
+                        {% endif %}
+                    </form>
+                </div><br>
+
+                <div class="pin-section">
+                    <form method="post" action="{% url 'pins:post_pin_toggle' post.id %}" class="pin-form">
+                        {% csrf_token %}
+                        {% if post.pinned_by_me %}
+                            <button type="submit" class="btn-danger">ピン留め解除</button>
+                        {% else %}
+                            <button type="submit" class="btn btn-primary btn-small">ピン留め</button>
+                        {% endif %}
+                    </form>
+                </div>
+                
+                <div class="post-actions">
+                    <a href="{% url 'posts:post_edit' username=post.author.username post_id=post.id %}" class="btn btn-small">編集</a>
+                    <a href="{% url 'posts:post_detail' username=post.author.username post_id=post.id %}" class="btn btn-small">詳細</a>
+                    
+                    {% if post.author == request.user %}
+                        <form method="post" action="{% url 'posts:post_delete' username=post.author.username post_id=post.id %}" class="delete-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-danger" onclick="return confirm('本当に削除しますか？')">削除</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<div class="logout-section">
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn">ログアウト</button>
+    </form>
+</div>
+
+{% endblock %}

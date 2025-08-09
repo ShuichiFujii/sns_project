@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プロフィール</title>
+    <link rel="stylesheet" href="static/css/profile.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* プロフィールヘッダー */
+        .profile-header {
+            position: relative;
+        }
+
+        .cover-section {
+            position: relative;
+            height: 200px;
+        }
+
+        .cover-image {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .profile-avatar {
+            position: absolute;
+            bottom: -60px;
+            left: 32px;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 6px solid white;
+            background: white;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .status-indicator {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            width: 24px;
+            height: 24px;
+            background: #4ade80;
+            border: 4px solid white;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-info {
+            padding: 80px 32px 32px;
+        }
+
+        .profile-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 24px;
+        }
+
+        .name-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .display-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 0;
+        }
+
+        .username {
+            font-size: 16px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .verified-badge {
+            background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #374151;
+            border: 2px solid #e5e7eb;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #f9fafb;
+            border-color: #d1d5db;
+        }
+
+        .btn-icon {
+            background: transparent;
+            border: 2px solid #e5e7eb;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #6b7280;
+        }
+
+        .btn-icon:hover {
+            background: #f9fafb;
+            border-color: #d1d5db;
+        }
+
+        .bio-section {
+            margin-bottom: 24px;
+        }
+
+        .bio {
+            font-size: 16px;
+            color: #374151;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .profile-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .profile-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #3b82f6;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .profile-link:hover {
+            color: #1d4ed8;
+        }
+
+        .join-date {
+            color: #6b7280;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stats-section {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        /* タブナビゲーション */
+        .tabs-container {
+            border-top: 1px solid #e5e7eb;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .tabs {
+            display: flex;
+            overflow-x: auto;
+        }
+
+        .tab {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 20px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            min-width: 120px;
+        }
+
+        .tab span:first-child {
+            font-size: 16px;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        .tab-count {
+            font-size: 12px;
+            color: #9ca3af;
+            font-weight: 500;
+        }
+
+        .tab.active span:first-child {
+            color: #3b82f6;
+        }
+
+        .tab.active .tab-count {
+            color: #3b82f6;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+            border-radius: 2px;
+        }
+
+        .tab:hover span:first-child {
+            color: #374151;
+        }
+
+        /* コンテンツエリア */
+        .content-area {
+            min-height: 400px;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 24px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* 投稿カード */
+        .post-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid #f3f4f6;
+            transition: all 0.3s ease;
+        }
+
+        .post-card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .post-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .post-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .post-meta {
+            flex: 1;
+        }
+
+        .post-author {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 2px;
+        }
+
+        .author-name {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 16px;
+        }
+
+        .author-username {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .post-time {
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        .post-content {
+            margin-bottom: 20px;
+        }
+
+        .post-content p {
+            color: #374151;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .post-image {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+        }
+
+        .post-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: linear-gradient(45deg, #eff6ff, #dbeafe);
+            color: #3b82f6;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid #bfdbfe;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            max-width: 400px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .action-btn:hover {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .action-btn.liked {
+            color: #ef4444;
+        }
+
+        .action-btn.liked:hover {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        /* 返信投稿 */
+        .post-card.reply {
+            border-left: 4px solid #3b82f6;
+            background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
+        }
+
+        .reply-context {
+            color: #6b7280;
+            font-size: 12px;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        /* メディアグリッド */
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .media-item {
+            aspect-ratio: 1;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .media-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .media-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* レスポンシブデザイン */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                border-radius: 16px;
+            }
+
+            .profile-info {
+                padding: 80px 20px 20px;
+            }
+
+            .profile-main {
+                flex-direction: column;
+                gap: 16px;
+                align-items: flex-start;
+            }
+
+            .name-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .display-name {
+                font-size: 24px;
+            }
+
+            .stats-section {
+                gap: 20px;
+            }
+
+            .tabs {
+                overflow-x: auto;
+            }
+
+            .tab {
+                min-width: 100px;
+                padding: 16px 12px;
+            }
+
+            .tab span:first-child {
+                font-size: 14px;
+            }
+
+            .content-area {
+                padding: 16px;
+            }
+
+            .post-card {
+                padding: 20px;
+            }
+
+            .media-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 12px;
+            }
+
+            .action-buttons {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-avatar {
+                width: 100px;
+                height: 100px;
+                left: 20px;
+                bottom: -50px;
+            }
+
+            .profile-info {
+                padding: 70px 16px 16px;
+            }
+
+            .display-name {
+                font-size: 20px;
+            }
+
+            .stats-section {
+                justify-content: space-around;
+            }
+
+            .stat-number {
+                font-size: 20px;
+            }
+
+            .media-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .post-actions {
+                max-width: 100%;
+            }
+
+            .action-btn {
+                padding: 6px 8px;
+                font-size: 12px;
+            }
+        }
+        </style>
+
+</head>
+<body>
+    <div class="container">
+        <!-- プロフィールヘッダー -->
+        <div class="profile-header">
+            <div class="cover-section">
+                <div class="cover-image"></div>
+                <div class="profile-avatar">
+                    <img src="/placeholder.svg?height=120&width=120" alt="プロフィール画像">
+                    <div class="status-indicator"></div>
+                </div>
+            </div>
+            
+            <div class="profile-info">
+                <div class="profile-main">
+                    <div class="name-section">
+                        <h1 class="display-name">田中 太郎</h1>
+                        <span class="username">@tanaka_taro</span>
+                        <div class="verified-badge">✓</div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn-secondary">メッセージ</button>
+                        <button class="btn-primary">フォロー</button>
+                        <button class="btn-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12C11 12.5523 11.4477 13 12 13Z" fill="currentColor"/>
+                                <path d="M12 6C12.5523 6 13 5.55228 13 5C13 4.44772 12.5523 4 12 4C11.4477 4 11 4.44772 11 5C11 5.55228 11.4477 6 12 6Z" fill="currentColor"/>
+                                <path d="M12 20C12.5523 20 13 19.5523 13 19C13 18.4477 12.5523 18 12 18C11.4477 18 11 18.4477 11 19C11 19.5523 11.4477 20 12 20Z" fill="currentColor"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="bio-section">
+                    <p class="bio">UI/UXデザイナー | フロントエンド開発者<br>
+                    美しいデジタル体験を創造することに情熱を注いでいます 🎨<br>
+                    Tokyo, Japan 📍</p>
+                    
+                    <div class="profile-links">
+                        <a href="#" class="profile-link">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            portfolio.tanaka.dev
+                        </a>
+                        <span class="join-date">2020年3月に参加</span>
+                    </div>
+                </div>
+                
+                <div class="stats-section">
+                    <div class="stat-item">
+                        <span class="stat-number">1,234</span>
+                        <span class="stat-label">フォロー中</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">5,678</span>
+                        <span class="stat-label">フォロワー</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">892</span>
+                        <span class="stat-label">投稿</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- タブナビゲーション -->
+        <div class="tabs-container">
+            <div class="tabs">
+                <button class="tab active" data-tab="posts">
+                    <span>投稿</span>
+                    <span class="tab-count">892</span>
+                </button>
+                <button class="tab" data-tab="media">
+                    <span>メディア</span>
+                    <span class="tab-count">156</span>
+                </button>
+                <button class="tab" data-tab="likes">
+                    <span>いいね</span>
+                    <span class="tab-count">2.1K</span>
+                </button>
+                <button class="tab" data-tab="replies">
+                    <span>返信</span>
+                    <span class="tab-count">234</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- コンテンツエリア -->
+        <div class="content-area">
+            <!-- 投稿タブ -->
+            <div class="tab-content active" id="posts">
+                <div class="post-card">
+                    <div class="post-header">
+                        <img src="/placeholder.svg?height=48&width=48" alt="ユーザーアバター" class="post-avatar">
+                        <div class="post-meta">
+                            <div class="post-author">
+                                <span class="author-name">田中 太郎</span>
+                                <span class="author-username">@tanaka_taro</span>
+                            </div>
+                            <span class="post-time">2時間前</span>
+                        </div>
+                    </div>
+                    
+                    <div class="post-content">
+                        <p>新しいプロジェクトのデザインシステムが完成しました！🎉<br><br>
+                        今回は特にアクセシビリティとユーザビリティに重点を置いて設計しました。カラーコントラスト比やフォーカス状態の視認性など、細部まで配慮しています。</p>
+                        
+                        <div class="post-image">
+                            <img src="/placeholder.svg?height=300&width=500" alt="投稿画像">
+                        </div>
+                        
+                        <div class="post-tags">
+                            <span class="tag">#デザインシステム</span>
+                            <span class="tag">#UI/UX</span>
+                            <span class="tag">#アクセシビリティ</span>
+                        </div>
+                    </div>
+                    
+                    <div class="post-actions">
+                        <button class="action-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>24</span>
+                        </button>
+                        <button class="action-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M17 1l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M3 11V9a4 4 0 0 1 4-4h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M7 23l-4-4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M21 13v2a4 4 0 0 1-4 4H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>12</span>
+                        </button>
+                        <button class="action-btn liked">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                            <span>156</span>
+                        </button>
+                        <button class="action-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <polyline points="16,6 12,2 8,6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <line x1="12" y1="2" x2="12" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="post-card">
+                    <div class="post-header">
+                        <img src="/placeholder.svg?height=48&width=48" alt="ユーザーアバター" class="post-avatar">
+                        <div class="post-meta">
+                            <div class="post-author">
+                                <span class="author-name">田中 太郎</span>
+                                <span class="author-username">@tanaka_taro</span>
+                            </div>
+                            <span class="post-time">5時間前</span>
+                        </div>
+                    </div>
+                    
+                    <div class="post-content">
+                        <p>今日はチームでユーザビリティテストを実施しました。実際のユーザーからのフィードバックは本当に貴重ですね。想定していなかった使い方や課題が見つかりました。</p>
+                    </div>
+                    
+                    <div class="post-actions">
+                        <button class="action-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>8</span>
+                        </button>
+                        <button class="action-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M17 1l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M3 11V9a4 4 0 0 1 4-4h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M7 23l-4-4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M21 13v2a4 4 0 0 1-4 4H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>3</span>
+                        </button>
+                        <button class="action-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>42</span>
+                        </button>
+                        <button class="action-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <polyline points="16,6 12,2 8,6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <line x1="12" y1="2" x2="12" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- メディアタブ -->
+            <div class="tab-content" id="media">
+                <div class="media-grid">
+                    <div class="media-item">
+                        <img src="/placeholder.svg?height=200&width=200" alt="メディア">
+                    </div>
+                    <div class="media-item">
+                        <img src="/placeholder.svg?height=200&width=200" alt="メディア">
+                    </div>
+                    <div class="media-item">
+                        <img src="/placeholder.svg?height=200&width=200" alt="メディア">
+                    </div>
+                    <div class="media-item">
+                        <img src="/placeholder.svg?height=200&width=200" alt="メディア">
+                    </div>
+                    <div class="media-item">
+                        <img src="/placeholder.svg?height=200&width=200" alt="メディア">
+                    </div>
+                    <div class="media-item">
+                        <img src="/placeholder.svg?height=200&width=200" alt="メディア">
+                    </div>
+                </div>
+            </div>
+
+            <!-- いいねタブ -->
+            <div class="tab-content" id="likes">
+                <div class="post-card">
+                    <div class="post-header">
+                        <img src="/placeholder.svg?height=48&width=48" alt="投稿者アバター" class="post-avatar">
+                        <div class="post-meta">
+                            <div class="post-author">
+                                <span class="author-name">佐藤 花子</span>
+                                <span class="author-username">@sato_hanako</span>
+                            </div>
+                            <span class="post-time">1日前</span>
+                        </div>
+                    </div>
+                    
+                    <div class="post-content">
+                        <p>デザインシステムの重要性について素晴らしい記事を見つけました。一貫性のあるユーザー体験を提供するために、デザインシステムは欠かせませんね。</p>
+                    </div>
+                    
+                    <div class="post-actions">
+                        <button class="action-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>15</span>
+                        </button>
+                        <button class="action-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M17 1l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M3 11V9a4 4 0 0 1 4-4h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M7 23l-4-4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M21 13v2a4 4 0 0 1-4 4H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>7</span>
+                        </button>
+                        <button class="action-btn liked">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                            <span>89</span>
+                        </button>
+                        <button class="action-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <polyline points="16,6 12,2 8,6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <line x1="12" y1="2" x2="12" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 返信タブ -->
+            <div class="tab-content" id="replies">
+                <div class="post-card reply">
+                    <div class="reply-context">
+                        <span>返信先: @yamada_jiro</span>
+                    </div>
+                    <div class="post-header">
+                        <img src="/placeholder.svg?height=48&width=48" alt="ユーザーアバター" class="post-avatar">
+                        <div class="post-meta">
+                            <div class="post-author">
+                                <span class="author-name">田中 太郎</span>
+                                <span class="author-username">@tanaka_taro</span>
+                            </div>
+                            <span class="post-time">3時間前</span>
+                        </div>
+                    </div>
+                    
+                    <div class="post-content">
+                        <p>とても参考になる記事ですね！特にカラーパレットの選び方について詳しく解説されていて勉強になりました。ありがとうございます！</p>
+                    </div>
+                    
+                    <div class="post-actions">
+                        <button class="action-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>2</span>
+                        </button>
+                        <button class="action-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M17 1l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M3 11V9a4 4 0 0 1 4-4h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M7 23l-4-4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M21 13v2a4 4 0 0 1-4 4H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>1</span>
+                        </button>
+                        <button class="action-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>12</span>
+                        </button>
+                        <button class="action-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <polyline points="16,6 12,2 8,6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <line x1="12" y1="2" x2="12" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // タブ切り替え機能
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // 全てのタブとコンテンツからactiveクラスを削除
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // クリックされたタブとそのコンテンツにactiveクラスを追加
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

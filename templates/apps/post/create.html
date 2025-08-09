@@ -1,0 +1,44 @@
+{% extends 'apps/base.html' %}
+
+{% block title %}新しい - SNS App{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <H1>新しい投稿</H1>
+    </div>
+
+    <div class="card-body">
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <textarea
+                    name="content"
+                    rows="5"
+                    class="form-textarea"
+                    placeholder="今何を考えていますか??">    
+                {{ content }}
+                </textarea>
+            </div>
+
+            <div class="form-group">
+                <input 
+                    type="text" 
+                    name="tags" 
+                    class="form-control" 
+                    placeholder="タグを入力 (例: #旅行 #食べ物)" 
+                    value="{{ tags|default_if_none:'' }}">
+            </div>   
+            
+            <button type="submit" class="btn btn-primary btn-large">投稿する</button>
+        </form>
+
+        <a href="{% url 'posts:post_list' %}" class="back-link">← 投稿一覧に戻る</a>
+    </div>
+
+{% endblock %}

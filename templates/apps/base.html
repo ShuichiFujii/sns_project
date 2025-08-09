@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SNS App{% endblock %}</title>
+    {% load static %}
+    {% comment %} <link rel="stylesheet" href="{% static 'css/base.css' %}"> {% endcomment %}
+    {% block extra_css %}{% endblock %}
+
+</head>
+<body>
+    <header>
+        {% block header_nav %}
+        <!-- ナビゲーションバーなど -->
+        {% endblock %}
+    </header>
+
+    <main>
+        {% block content %}
+        <!-- 子テンプレートの中身がここに挿入される -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 SNS</p>
+    </footer>
+</body>
+</html>

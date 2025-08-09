@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プロフィール - SNS</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* リセットCSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #000;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        /* ヘッダー */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid #2f3336;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 16px;
+            height: 60px;
+        }
+
+        .logo h1 {
+            color: #1d9bf0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .nav {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-link {
+            color: #e7e9ea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: #1d9bf0;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* メインレイアウト */
+        .main {
+            margin-top: 60px;
+            min-height: calc(100vh - 60px);
+        }
+
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 24px;
+        }
+
+        /* サイドバー */
+        .sidebar {
+            width: 300px;
+            padding: 20px;
+        }
+
+        .sidebar-content {
+            background-color: #16181c;
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .sidebar-content h3 {
+            margin-bottom: 16px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .recommended-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #2f3336;
+        }
+
+        .recommended-user:last-child {
+            border-bottom: none;
+        }
+
+        .recommended-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .recommended-info {
+            flex: 1;
+        }
+
+        .recommended-name {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .recommended-handle {
+            color: #71767b;
+            font-size: 14px;
+        }
+
+        .follow-btn {
+            background-color: #1d9bf0;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 6px 16px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .follow-btn:hover {
+            background-color: #1a8cd8;
+        }
+
+        /* メインコンテンツ */
+        .content {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        /* プロフィールヘッダー */
+        .profile-header {
+            background-color: #16181c;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .cover-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .cover-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info {
+            padding: 16px 20px 20px;
+        }
+
+        .profile-avatar-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 16px;
+            margin-top: -60px;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid #16181c;
+            background-color: #16181c;
+        }
+
+        .edit-profile-btn,
+        .follow-profile-btn {
+            background-color: transparent;
+            color: #1d9bf0;
+            border: 1px solid #1d9bf0;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .edit-profile-btn:hover,
+        .follow-profile-btn:hover {
+            background-color: rgba(29, 155, 240, 0.1);
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .profile-handle {
+            color: #71767b;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .profile-bio {
+            font-size: 16px;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .profile-meta {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #71767b;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stat-link {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.2s;
+        }
+
+        .stat-link:hover {
+            color: #1d9bf0;
+        }
+
+        .stat-number {
+            font-weight: bold;
+            color: #e7e9ea;
+            margin-right: 4px;
+        }
+
+        .stat-label {
+            color: #71767b;
+        }
+
+        /* タブナビゲーション */
+        .tab-navigation {
+            display: flex;
+            border-bottom: 1px solid #2f3336;
+            margin-bottom: 0;
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            color: #71767b;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.2s;
+        }
+
+        .tab-btn:hover {
+            color: #e7e9ea;
+            background-color: rgba(231, 233, 234, 0.03);
+        }
+
+        .tab-btn.active {
+            color: #e7e9ea;
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background-color: #1d9bf0;
+            border-radius: 2px;
+        }
+
+        /* 投稿コンテナ */
+        .posts-container {
+            background-color: #16181c;
+            border-radius: 0 0 16px 16px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* 投稿 */
+        .post {
+            padding: 16px 20px;
+            border-bottom: 1px solid #2f3336;
+            transition: background-color 0.2s;
+        }
+
+        .post:hover {
+            background-color: rgba(231, 233, 234, 0.03);
+        }
+
+        .post:last-child {
+            border-bottom: none;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .post-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .post-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .post-name {
+            font-weight: bold;
+            color: #e7e9ea;
+        }
+
+        .post-handle,
+        .post-time {
+            color: #71767b;
+            font-size: 14px;
+        }
+
+        .post-content {
+            margin-left: 52px;
+            margin-bottom: 12px;
+        }
+
+        .post-content p {
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .post-image {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 16px;
+            margin-top: 12px;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            max-width: 400px;
+            margin-left: 52px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: #71767b;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 20px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .action-btn:hover {
+            background-color: rgba(29, 155, 240, 0.1);
+            color: #1d9bf0;
+        }
+
+        .action-btn.liked {
+            color: #f91880;
+        }
+
+        .action-btn.liked:hover {
+            background-color: rgba(249, 24, 128, 0.1);
+        }
+
+        /* 返信投稿 */
+        .post.reply {
+            border-left: 2px solid #1d9bf0;
+            margin-left: 20px;
+            padding-left: 16px;
+        }
+
+        .reply-indicator {
+            color: #71767b;
+            font-size: 12px;
+            margin-bottom: 8px;
+            margin-left: 52px;
+        }
+
+        /* メディアグリッド */
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 4px;
+            padding: 20px;
+        }
+
+        .media-item {
+            aspect-ratio: 1;
+            overflow: hidden;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .media-item:hover {
+            transform: scale(1.02);
+        }
+
+        .media-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* レスポンシブデザイン */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                order: 2;
+            }
+
+            .content {
+                max-width: 100%;
+            }
+
+            .header-container {
+                padding: 0 12px;
+            }
+
+            .nav {
+                display: none;
+            }
+
+            .profile-avatar-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            .profile-stats {
+                flex-wrap: wrap;
+            }
+
+            .post-content,
+            .post-actions,
+            .reply-indicator {
+                margin-left: 0;
+            }
+
+            .media-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 2px;
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tab-btn {
+                font-size: 14px;
+                padding: 12px 8px;
+            }
+
+            .profile-name {
+                font-size: 20px;
+            }
+
+            .post {
+                padding: 12px 16px;
+            }
+
+            .media-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ヘッダーナビゲーション -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <h1>SNS</h1>
+            </div>
+            <nav class="nav">
+                <a href="#" class="nav-link">ホーム</a>
+                <a href="#" class="nav-link">探索</a>
+                <a href="#" class="nav-link">通知</a>
+                <a href="#" class="nav-link">メッセージ</a>
+            </nav>
+            <div class="user-menu">
+                <!-- ログインユーザーのアバター - Django: {{ user.avatar }} -->
+                <img src="/placeholder.svg?height=32&width=32" alt="ユーザーアバター" class="user-avatar">
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- サイドバー -->
+            <aside class="sidebar">
+                <div class="sidebar-content">
+                    <h3>おすすめユーザー</h3>
+                    <!-- おすすめユーザーリスト - Django: {% for user in recommended_users %} -->
+                    <div class="recommended-user">
+                        <img src="/placeholder.svg?height=40&width=40" alt="おすすめユーザー" class="recommended-avatar">
+                        <div class="recommended-info">
+                            <p class="recommended-name">おすすめユーザー名</p>
+                            <p class="recommended-handle">@username</p>
+                        </div>
+                        <button class="follow-btn">フォロー</button>
+                    </div>
+                    <!-- {% endfor %} -->
+                </div>
+            </aside>
+
+            <!-- メインコンテンツ -->
+            <div class="content">
+                <!-- プロフィールヘッダー -->
+                <div class="profile-header">
+                    <!-- カバー画像 - Django: {{ profile.cover_image }} -->
+                    <div class="cover-image">
+                        <img src="/placeholder.svg?height=200&width=600" alt="カバー画像">
+                    </div>
+
+                    <div class="profile-info">
+                        <div class="profile-avatar-section">
+                            <!-- プロフィール画像 - Django: {{ profile.avatar }} -->
+                            <img src="/placeholder.svg?height=120&width=120" alt="プロフィール画像" class="profile-avatar">
+
+                            <!-- フォロー/編集ボタン - Django: {% if user == profile.user %} -->
+                            <button class="edit-profile-btn">プロフィールを編集</button>
+                            <!-- {% else %} -->
+                            <!-- <button class="follow-profile-btn">フォロー</button> -->
+                            <!-- {% endif %} -->
+                        </div>
+
+                        <div class="profile-details">
+                            <!-- ユーザー名 - Django: {{ profile.display_name }} -->
+                            <h1 class="profile-name">ユーザー名</h1>
+                            <!-- ユーザーハンドル - Django: @{{ profile.username }} -->
+                            <p class="profile-handle">@username</p>
+
+                            <!-- プロフィール説明 - Django: {{ profile.bio }} -->
+                            <p class="profile-bio">ここにプロフィールの説明文が入ります。趣味や興味のあることなどを書きます。</p>
+
+                            <div class="profile-meta">
+                                <!-- 参加日 - Django: {{ profile.created_at|date:"Y年m月" }} -->
+                                <span class="join-date">📅 2023年1月に参加</span>
+                                <!-- 場所 - Django: {{ profile.location }} -->
+                                <span class="location">📍 東京, 日本</span>
+                            </div>
+
+                            <div class="profile-stats">
+                                <!-- フォロー数 - Django: {{ profile.following_count }} -->
+                                <a href="#" class="stat-link">
+                                    <span class="stat-number">123</span>
+                                    <span class="stat-label">フォロー中</span>
+                                </a>
+                                <!-- フォロワー数 - Django: {{ profile.followers_count }} -->
+                                <a href="#" class="stat-link">
+                                    <span class="stat-number">456</span>
+                                    <span class="stat-label">フォロワー</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- タブナビゲーション -->
+                <div class="tab-navigation">
+                    <button class="tab-btn active" data-tab="posts">投稿</button>
+                    <button class="tab-btn" data-tab="replies">返信</button>
+                    <button class="tab-btn" data-tab="media">メディア</button>
+                    <button class="tab-btn" data-tab="likes">いいね</button>
+                </div>
+
+                <!-- 投稿一覧 -->
+                <div class="posts-container">
+                    <!-- 投稿タブ - ユーザーの投稿一覧 -->
+                    <div class="tab-content active" id="posts">
+                        <!-- Django: {% for post in user_posts %} -->
+                        <article class="post">
+                            <div class="post-header">
+                                <img src="/placeholder.svg?height=40&width=40" alt="ユーザーアバター" class="post-avatar">
+                                <div class="post-info">
+                                    <!-- Django: {{ post.user.display_name }} -->
+                                    <span class="post-name">ユーザー名</span>
+                                    <!-- Django: @{{ post.user.username }} -->
+                                    <span class="post-handle">@username</span>
+                                    <!-- Django: {{ post.created_at|timesince }} -->
+                                    <span class="post-time">2時間前</span>
+                                </div>
+                            </div>
+                            <div class="post-content">
+                                <!-- Django: {{ post.content }} -->
+                                <p>これは投稿の内容です。ユーザーが投稿したテキストがここに表示されます。</p>
+                                <!-- Django: {% if post.image %} -->
+                                <img src="/placeholder.svg?height=300&width=500" alt="投稿画像" class="post-image">
+                                <!-- {% endif %} -->
+                            </div>
+                            <div class="post-actions">
+                                <!-- Django: {{ post.replies_count }} -->
+                                <button class="action-btn">💬 5</button>
+                                <!-- Django: {{ post.retweets_count }} -->
+                                <button class="action-btn">🔄 12</button>
+                                <!-- Django: {{ post.likes_count }} -->
+                                <button class="action-btn">❤️ 23</button>
+                                <button class="action-btn">📤</button>
+                            </div>
+                        </article>
+                        <!-- {% endfor %} -->
+                    </div>
+
+                    <!-- いいね欄 - ここでは、ユーザーが過去にいいねを押した投稿を閲覧することができる -->
+                    <div class="tab-content" id="likes">
+                        <!-- Django: {% for liked_post in user_liked_posts %} -->
+                        <article class="post">
+                            <div class="post-header">
+                                <!-- Django: {{ liked_post.user.avatar }} -->
+                                <img src="/placeholder.svg?height=40&width=40" alt="投稿者アバター" class="post-avatar">
+                                <div class="post-info">
+                                    <!-- Django: {{ liked_post.user.display_name }} -->
+                                    <span class="post-name">投稿者名</span>
+                                    <!-- Django: @{{ liked_post.user.username }} -->
+                                    <span class="post-handle">@author</span>
+                                    <!-- Django: {{ liked_post.created_at|timesince }} -->
+                                    <span class="post-time">1日前</span>
+                                </div>
+                            </div>
+                            <div class="post-content">
+                                <!-- Django: {{ liked_post.content }} -->
+                                <p>これはユーザーがいいねした投稿の内容です。</p>
+                            </div>
+                            <div class="post-actions">
+                                <button class="action-btn">💬 3</button>
+                                <button class="action-btn">🔄 8</button>
+                                <button class="action-btn liked">❤️ 15</button>
+                                <button class="action-btn">📤</button>
+                            </div>
+                        </article>
+                        <!-- {% endfor %} -->
+                    </div>
+
+                    <!-- 返信タブ - ユーザーの返信一覧 -->
+                    <div class="tab-content" id="replies">
+                        <!-- Django: {% for reply in user_replies %} -->
+                        <article class="post reply">
+                            <div class="reply-indicator">
+                                <span>返信先: @original_user</span>
+                            </div>
+                            <div class="post-header">
+                                <img src="/placeholder.svg?height=40&width=40" alt="ユーザーアバター" class="post-avatar">
+                                <div class="post-info">
+                                    <span class="post-name">ユーザー名</span>
+                                    <span class="post-handle">@username</span>
+                                    <span class="post-time">3時間前</span>
+                                </div>
+                            </div>
+                            <div class="post-content">
+                                <!-- Django: {{ reply.content }} -->
+                                <p>これは返信の内容です。</p>
+                            </div>
+                            <div class="post-actions">
+                                <button class="action-btn">💬 2</button>
+                                <button class="action-btn">🔄 1</button>
+                                <button class="action-btn">❤️ 5</button>
+                                <button class="action-btn">📤</button>
+                            </div>
+                        </article>
+                        <!-- {% endfor %} -->
+                    </div>
+
+                    <!-- メディアタブ - ユーザーの画像/動画投稿一覧 -->
+                    <div class="tab-content" id="media">
+                        <div class="media-grid">
+                            <!-- Django: {% for media_post in user_media_posts %} -->
+                            <div class="media-item">
+                                <!-- Django: {{ media_post.image }} -->
+                                <img src="/placeholder.svg?height=200&width=200" alt="メディア投稿">
+                            </div>
+                            <!-- {% endfor %} -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // タブ切り替え機能
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // アクティブなタブを削除
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                // 新しいタブをアクティブに
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.tab).classList.add('active');
+            });
+        });
+    </script>
+</body>
+
+</html>

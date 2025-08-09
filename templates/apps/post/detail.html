@@ -1,0 +1,86 @@
+{% extends 'apps/base.html' %}
+
+{% block title %}投稿詳細 - SNS App{% endblock %}
+
+
+{% block content %}
+<div class="card">
+    <!-- 投稿フォーム -->
+    <div class="post-header">
+        <div>
+            <div class="post-author">{{ post.author.username }}</div>
+            <div class="post-date">{{ post.created_at }}</div>
+        </div>
+    </div>
+    
+    <div class="post-content">
+        {{ post.content }}
+    </div>
+    
+    <div class="post-footer">
+        <div class="post-stats">
+            <div class="stat-item">
+                <span class="stat-label">投稿ID:</span>
+                <span class="stat-value">{{ post.id }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">いいね:</span>
+                <span class="stat-value">{{ post.likes.count }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">コメント:</span>
+                <span class="stat-value">{{ post.comments.count }}</span>
+            </div>
+            <div>
+                <span class="stat-label">タグ:</span>
+                {% for tag in tags %}
+                    <span class="tag">{{ tag.name }}</span>
+                {% empty %}
+                    <span>No tags</span>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+    
+    <!-- コメントフォーム -->
+    <div class="comment-form-section">
+        <h3>コメントを投稿</h3>
+        
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+        
+        <form method="post" action="{% url 'comments:comment_create' post.id %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <textarea 
+                    name="comment" 
+                    rows="3" 
+                    class="form-textarea" 
+                    placeholder="コメントを入力してください">{{ comment }}</textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">投稿する</button>
+        </form>
+    </div>
+    
+    <a href="{% url 'posts:post_list' %}" class="back-link">← 投稿一覧に戻る</a>
+    
+    <div class="comment-section">
+        <h3>コメント一覧</h3>
+        {% for comment in comments.all %}
+            <div class="comment-item">
+                <div class="comment-meta">
+                    <span class="comment-author">{{ comment.author.username }}</span>
+                    <span class="comment-date">{{ comment.created_at }}</span>
+                    <span class="comment-id">ID: {{ comment.id }}</span>
+                </div>
+                <div class="comment-content">
+                    {{ comment.comment }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+</div>
+{% endblock %}

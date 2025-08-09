@@ -1,0 +1,30 @@
+{% extends 'apps/base.html' %}
+{% load static %}
+
+{% block title %}{{ profile_user.username }} のプロフィール{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    {# ① プロフィール共通ヘッダー #}
+    {% include 'apps/user/profile/_profile_header.html' with profile_user=profile_user %}
+
+    {# ② タブナビゲーション #}
+    <nav class="tabs-container">
+        <a href="{% url 'users:profile_posts' profile_user.username %}">
+            投稿 <span class="tab-count">{{ posts_count }}</span>
+        </a>
+        <a href="{% url 'users:profile_likes' profile_user.username %}">
+            いいね <span class="tab-count">{{ likes_count }}</span>
+        </a>
+    </nav>
+
+    {# ③ 子テンプレートで上書きする領域 #}
+    {% block tab_content %}{% endblock %}
+
+</div>
+{% endblock %}

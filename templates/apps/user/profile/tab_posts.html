@@ -1,0 +1,25 @@
+{% extends 'apps/user/profile/base_profile.html' %}
+{% block tab_content %}
+<div class="content-area">
+    {% for post in posts %}
+        {# 投稿カードをコンポーネント化している場合は include でもOK #}
+        <div class="post-card">
+            <div class="post-header">
+                <img src="{{ post.author.avatar.url }}" alt="" class="post-avatar">
+                <div class="post-meta">
+                    <div class="post-author">
+                        <span class="author-name">{{ post.author.username }}</span>
+                        <span class="author-username">@{{ post.author.username }}</span>
+                    </div>
+                    <span class="post-time">{{ post.created_at|timesince }}前</span>
+                </div>
+            </div>
+            <div class="post-content">
+                <p>{{ post.content|linebreaksbr }}</p>
+            </div>
+        </div>
+    {% empty %}
+        <p>まだ投稿がありません。</p>
+    {% endfor %}
+</div>
+{% endblock %}
